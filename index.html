@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Elm • HN</title>
+  <link rel="stylesheet" href="normalize.css">
+  <link rel="stylesheet" href="styles.css">
+  <link href='http://fonts.googleapis.com/css?family=Merriweather:300italic,700,700italic' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Roboto:300' rel='stylesheet' type='text/css'>
+  <style type="text/css">
+    #content > div {
+      width: auto !important;
+    }
+  </style>
+  <script src="//cdn.firebase.com/js/client/2.0.2/firebase.js"></script>
+  <script src="https://cdn.rawgit.com/visionmedia/page.js/master/page.js"></script>
+  <script src="//cdn.jsdelivr.net/rsvp/3.0.6/rsvp.js"></script>
+  <script src="elm.js"></script>
+</head>
+
+<body>
+
+<div id="content"></div>
+
+<script type="text/javascript">
+
+  var hn = Elm.embed(Elm.HN, document.getElementById('content'), {
+    user: {about: "", id: ""},
+    topNews: [],
+    comments: {text: "test", childs: []}
+  });
+
+  var ref = new Firebase("https://hacker-news.firebaseio.com/v0/");
+
+  function getNews() {
+    ref.child('topstories').on('value', function(snapshot) {
+      var entries = snapshot.val();
+      var results = []
+      var length = entries.length;
+      entries.forEach(function(id) {
+
+        ref.child('item').child(id).once('value', function(snapshot) {
+          var value = snapshot.val();
+          value.text || (value.text = '');
+          value.url || (value.url = '');
+          value.comments = (value.kids && value.kids.length) || 0;
+//          console.log(value)
+          if (!value.deleted) {
+            results.push(value)
+          } else {
+            length--;
+          }
+          if (results.length === length) {
+            hn.ports.topNews.send(results);
+          }
+        })
+      })
+    });
+  }
+
+  function getThreadComments(id) {
+    return new RSVP.Promise(function(resolve, reject) {
+      ref.child('item/' + id).once('value', function(snapshot) {
+        var comment = snapshot.val();
+        if (comment.kids) {
+          var promises = comment.kids.map(function(id) {
+            return getThreadComments(id);
+          });
+
+          RSVP.all(promises).then(function(kids) {
+            comment.childs = kids;
+            resolve(comment)
+          })
+        } else {
+          comment.childs = [];
+          resolve(comment);
+        }
+      });
+    });
+  }
+
+  function getItem(ctx) {
+    getThreadComments(ctx.params.itemId).then(function(thread) {
+      console.log(thread);
+      hn.ports.comments.send(thread);
+    })
+  }
+
+  function getUser(ctx) {
+    ref.child('user/' + ctx.params.userId).once('value', function(snapshot) {
+      hn.ports.user.send(snapshot.val());
+    });
+  }
+
+  page('/', getNews);
+  page('/user/:userId', getUser);
+  page('/item/:itemId', getItem);
+  page({hashbang: true});
+  getNews();
+</script>
+</body>
+</html>

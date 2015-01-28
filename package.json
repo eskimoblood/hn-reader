@@ -1,0 +1,17 @@
+{
+  "name": "HN",
+  "version": "0.0.0",
+  "description": "",
+  "main": "''",
+  "scripts": {
+    "watch-elm": "wr --exec 'elm-make hn.elm *.elm' *.elm",
+    "watch-css": "wr --exec 'autoprefixer *.css' *.css"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^4.0.0",
+    "http-server": "^0.7.4",
+    "wr": "^1.3.1"
+  }
+}

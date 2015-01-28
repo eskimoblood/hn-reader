@@ -1,0 +1,116 @@
+body, html, #content, #content > div, #content > div > div {
+  height: 100% !important;
+}
+
+body {
+  color: hsl(0, 0%, 20%);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.row, .column {
+  height: 100%;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.column {
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  overflow-y: scroll;
+}
+
+.main {
+  -webkit-flex: 1px;
+      -ms-flex: 1px;
+          flex: 1px;
+}
+
+ul {
+  list-style: none;
+  padding: 10px;
+}
+
+.sidebar {
+  width: 350px;
+}
+
+.sidebar li {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 10px 3px 10px;
+  border-bottom: solid 1px hsl(0, 0%, 93%);
+  font-size: 12px;
+  min-height: 65px;
+}
+
+.sidebar li:nth-child(odd){
+  background: hsl(53, 75%, 93%);
+}
+
+.sidebar li div {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  font-family: 'Merriweather', serif;
+}
+
+.sidebar li p {
+  font-weight: 100;
+  margin-bottom: 0;
+  font-style: italic;
+}
+
+.sidebar h3 {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  padding-right: 10px;
+}
+
+.sidebar li > a {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  text-align: right;
+}
+
+.sidebar li > a span {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex: 1px;
+      -ms-flex: 1px;
+          flex: 1px;
+  vertical-align: middle;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-justify-content: flex-end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
+.content {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  line-height: 1.45;
+  font-size:14px;
+}
