@@ -122,8 +122,8 @@ render state =
 
         ]
 
-scene : State -> Element
-scene s = toElement 900 500 (div [] [render s])
+scene : State -> Html
+scene s =render s
 
-main : Signal Element
+main : Signal Html
 main = scene <~ state
